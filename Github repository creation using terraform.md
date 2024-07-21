@@ -5,7 +5,7 @@ Create terraform-github-resource folder
   mkdir terraform-github-resource
   cd terraform-github-resource
 ```
-Using vs code create file <b>terraform.tf</b> and add following code lines
+Using vs code create file <b>terraform-resource.tf</b> and add following code lines
 ```sh
   provider "github" {
     token = ""
