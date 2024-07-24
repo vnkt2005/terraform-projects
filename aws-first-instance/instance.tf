@@ -12,13 +12,14 @@ output "keyname" {
 
 # create aws instance
 resource "aws_instance" "web" {
-  ami             = "ami-04a81a99f5ec58529"
-  instance_type   = "t2.micro"
-  key_name        = aws_key_pair.key-tf.key_name
+  ami                    = "ami-04a81a99f5ec58529"
+  instance_type          = "t2.micro"
+  key_name               = aws_key_pair.key-tf.key_name
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
   tags = {
     Name = "first-tf-instance"
   }
+  user_data = file("${path.module}/script.sh")
 }
 
 
@@ -41,7 +42,7 @@ resource "aws_security_group" "allow_tls" {
     }
   }
 
-egress {
+  egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
