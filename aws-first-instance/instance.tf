@@ -35,9 +35,15 @@ resource "aws_instance" "web" {
     command = "echo ${self.public_ip} > xyz.txt"
   }
 
-  #provisioner "local-exec" {
-  #  command = "dir > /tmp/dirfiles.txt"
-  #}
+  provisioner "local-exec" {
+    command = "dir > dirfiles.txt"
+  }
+
+  provisioner "local-exec" {
+    working_dir = "e:\\terraproj\\aws-first-instance\\"
+    interpreter = ["python", "-c"]
+    command = "print('HelloWorld')"
+  }
 
 
 }
