@@ -32,7 +32,7 @@ resource "aws_instance" "web" {
   }
 
   provisioner "local-exec" {
-    command = "echo ${self.public_ip} > /tmp/mypublicip.txt "
+    command = "echo ${self.public_ip} > xyz.txt"
   }
 
   #provisioner "local-exec" {
