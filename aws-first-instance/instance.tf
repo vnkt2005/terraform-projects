@@ -2,8 +2,29 @@
 # ssh connection
 # ssh -i id_rsa ubuntu@52.87.202.40
 
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"]
+
+  filter {
+    name   = "name"
+    values = ["${var.image_name}"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 resource "aws_instance" "web" {
-  ami                    = "ami-04a81a99f5ec58529"
+  ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.key-tf.key_name
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
@@ -16,7 +37,7 @@ resource "aws_instance" "web" {
     type        = "ssh"
     user        = "ubuntu"
     private_key = file("${path.module}/id_rsa")
-    host        = "${self.public_ip}"
+    host        = self.public_ip
   }
 
   # file, local-exec, remote-exec
@@ -27,7 +48,7 @@ resource "aws_instance" "web" {
 
   # file, local-exec, remote-exec
   provisioner "file" {
-    content = "this is my sample content"
+    content     = "this is my sample content"
     destination = "/tmp/content.md"
   }
 
@@ -42,7 +63,7 @@ resource "aws_instance" "web" {
   provisioner "local-exec" {
     working_dir = "e:\\terraproj\\aws-first-instance\\"
     interpreter = ["python", "-c"]
-    command = "print('HelloWorld')"
+    command     = "print('HelloWorld')"
   }
 
   provisioner "remote-exec" {
